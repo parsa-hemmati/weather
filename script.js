@@ -4,6 +4,10 @@ $(".btn").on("click", function(event) {
     var city = $("search-input").val()
     var cityBtn = $("<button>");
     cityBtn.addClass("btn btn-secondary");
+    cityBtn.css({
+        "height": "100%",
+        "width": "50%"
+      });
     cityBtn.text(city);
     $("#history").append(cityBtn);
     var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + apiKey
@@ -16,17 +20,12 @@ $(".btn").on("click", function(event) {
         console.log(response.list);
         var weather = response.list;
         for (var i = 0; i < weather.length; i++) {
-            var date = weather[i].dt_txt;
+            var rawDate = weather[i].dt_txt;
+            var date = moment(rawDate).format("MMMM Do YYYY, h:mm a");
             var temp = weather[i].main.temp;
             var humidity = weather[i].main.humidity;
             var icon = weather[i].weather[0].icon;
             var iconURL = "http://openweathermap.org/img/w/" + icon + ".png";
-            // var weatherDiv = $("<div>");
-            // weatherDiv.append("<p>" + date + "</p>");
-            // weatherDiv.append("<p>" + temp + "</p>");
-            // weatherDiv.append("<p>" + humidity + "</p>");
-            // weatherDiv.append("<img src=" + iconURL + ">");
-            // $("#forecast").append(weatherDiv);
             var card = `
             <div class="card" style="width: 18rem;">
               <img class="card-img-top" src="${iconURL}" alt="Card image cap" style="width: 50px; height: 50px;">
@@ -40,8 +39,4 @@ $(".btn").on("click", function(event) {
           $("#forecast").append(card);
         }
     });
-});
-
-
-// When the user clicks on a city button, the weather forecast for that city is displayed
-        
+});        
